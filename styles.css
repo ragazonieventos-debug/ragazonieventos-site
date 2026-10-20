@@ -551,3 +551,42 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .foot-top { flex-direction:column; }
   .promises { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   ÁLBUM DE FOTOS MISTURADAS (data/album.json)
+   ============================================================ */
+#album[hidden] { display: none; }
+.album-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(0.4rem, 1vw, 0.8rem); }
+.album-item {
+  position: relative; display: block; aspect-ratio: 1; overflow: hidden; padding: 0; border: 0;
+  background: var(--surface); cursor: zoom-in;
+}
+.album-item:nth-child(7n+1) { grid-column: span 2; grid-row: span 2; }
+.album-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .8s var(--ease), filter .5s var(--ease); }
+.album-item:hover img, .album-item:focus-visible img { transform: scale(1.06); filter: brightness(1.05); }
+.album-more { display: flex; justify-content: center; margin-top: clamp(1.4rem, 3vw, 2.2rem); }
+.album-more [hidden] { display: none; }
+.album-lightbox {
+  position: fixed; inset: 0; background: rgba(10,9,8,.95); z-index: 200;
+  display: none; align-items: center; justify-content: center; padding: 3rem;
+}
+.album-lightbox.open { display: flex; }
+.album-lightbox img { max-width: 88vw; max-height: 80vh; object-fit: contain; }
+.lb-caption { position: absolute; bottom: 1.6rem; left: 1rem; right: 1rem; text-align: center; color: #fff; font-size: 0.85rem; letter-spacing: 0.05em; }
+.lb-close, .lb-prev, .lb-next {
+  position: absolute; color: #fff; width: 2.8rem; height: 2.8rem; border-radius: 50%;
+  display: grid; place-content: center; font-size: 1.4rem; border: 1px solid rgba(255,255,255,.3);
+  background: rgba(0,0,0,.25); cursor: pointer; transition: background .3s;
+}
+.lb-close:hover, .lb-prev:hover, .lb-next:hover { background: rgba(255,255,255,.14); }
+.lb-close { top: 1.2rem; right: 1.2rem; }
+.lb-prev { left: 1.2rem; top: 50%; transform: translateY(-50%); }
+.lb-next { right: 1.2rem; top: 50%; transform: translateY(-50%); }
+
+@media (max-width: 980px) { .album-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px) {
+  .album-grid { grid-template-columns: repeat(2, 1fr); }
+  .album-lightbox { padding: 1rem; }
+  .album-lightbox img { max-width: 100%; }
+  .lb-prev, .lb-next { top: auto; bottom: 4rem; transform: none; }
+}

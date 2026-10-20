@@ -30,6 +30,7 @@
       <a href="#tecnologia">Tecnologia</a>
       <a href="#como">Como funciona</a>
       <a href="#depoimentos">Depoimentos</a>
+      <a href="#album" data-album-nav hidden>Álbum</a>
       <a href="#contato">Contato</a>
     </nav>
     <div class="nav-cta">
@@ -49,8 +50,9 @@
   <a href="#tecnologia">Tecnologia <span>03</span></a>
   <a href="#como">Como funciona <span>04</span></a>
   <a href="#depoimentos">Depoimentos <span>05</span></a>
-  <a href="#playlists">Playlists <span>06</span></a>
-  <a href="#contato">Contato <span>07</span></a>
+  <a href="#album" data-album-nav hidden>Álbum <span>06</span></a>
+  <a href="#playlists">Playlists <span>07</span></a>
+  <a href="#contato">Contato <span>08</span></a>
   <div class="mm-foot">Mogi Mirim · SP · @ragazonieventos</div>
 </nav>
 
@@ -315,30 +317,33 @@
         </a>
       </div>
 
-      <div class="depo-grid" data-reveal>
-        <blockquote class="depo-card">
-          <p>"Seu trabalho foi impecável, sua equipe é maravilhosa! Todo mundo elogiou — e eu consegui pelo menos mais uns 3 casamentos pra você fazer!"</p>
-          <footer><strong>Luísa Guerreiro</strong><span>Casamento Luísa &amp; Marcelo · maio/2026</span></footer>
-        </blockquote>
-        <blockquote class="depo-card">
-          <p>"Você realmente fez um trabalho impecável, cuidando de cada detalhe e esteve comigo em todos os momentos, sempre muito atencioso. Fez todas as festas da minha família — realizou um sonho que eu tinha desde criança."</p>
-          <footer><strong>Lorena Zambello</strong><span>XV Anos · dezembro/2025</span></footer>
-        </blockquote>
-        <blockquote class="depo-card">
-          <p>"Nem em BH ela viu profissionais assim, tão atenciosos, educados, organizados! Você é o melhor — e eu quero que você organize a renovação de votos, aniversários… só pra não perder esse contato!"</p>
-          <footer><strong>Amanda &amp; Rafael</strong><span>Casamento · novembro/2025</span></footer>
-        </blockquote>
-        <blockquote class="depo-card">
-          <p>"Foi tudo lindo e além do que eu imaginava. Passando para agradecer você e sua equipe — mas você em especial."</p>
-          <footer><strong>Ana Julia Mallmann</strong><span>Formatura · março/2026</span></footer>
-        </blockquote>
-        <blockquote class="depo-card">
-          <p>"Lembrei que foi maravilhoso — seu serviço é bárbaro, excelente, viu? Estava ótimo!"</p>
-          <footer><strong>Vovó Marcela</strong><span>Festa infantil Davi · maio/2026</span></footer>
-        </blockquote>
-      </div>
+      <!-- Os depoimentos vêm de data/depoimentos.json (+ respostas do formulário com Publicar = sim). -->
+      <div class="depo-grid" id="depoGrid" data-reveal></div>
     </div>
   </section>
+
+  <!-- ============ ÁLBUM (data/album.json) — fotos misturadas; aparece só quando houver fotos ============ -->
+  <section class="section" id="album" data-screen-label="Álbum" hidden>
+    <div class="container">
+      <div class="gal-head" data-reveal>
+        <div>
+          <span class="eyebrow">Nosso álbum</span>
+          <h2 class="display" style="margin-top:1.2rem">Momentos que <em>assinamos</em>.</h2>
+        </div>
+        <p class="lead">Um pouco dos casamentos e festas que organizamos. Toque em qualquer foto para ampliar.</p>
+      </div>
+      <div class="album-grid" id="albumGrid" data-reveal></div>
+      <div class="album-more"><button type="button" class="btn btn-ghost" id="albumMore" hidden>Ver mais fotos</button></div>
+    </div>
+  </section>
+
+  <div class="album-lightbox" id="albumLightbox" role="dialog" aria-modal="true" aria-label="Foto ampliada">
+    <button class="lb-close" id="lbClose" aria-label="Fechar">&times;</button>
+    <button class="lb-prev" id="lbPrev" aria-label="Anterior">&larr;</button>
+    <img id="lbImg" src="" alt="" />
+    <button class="lb-next" id="lbNext" aria-label="Próxima">&rarr;</button>
+    <div class="lb-caption" id="lbCaption"></div>
+  </div>
 
   <!-- GALERIA / INSTAGRAM FEED -->
   <section class="section" id="galeria" data-screen-label="Galeria">
