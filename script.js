@@ -184,6 +184,7 @@
         var iEvento = colIdx(h, 'evento') !== -1 ? colIdx(h, 'evento') : colIdx(h, 'data e');
         var iNota = colIdx(h, 'nota');
         var iPublish = colIdx(h, 'publicar');
+        var iData = colIdx(h, 'carimbo');
         return rows.slice(1)
           .filter(function (r) {
             var pub = iPublish >= 0 ? (r[iPublish] || '').toLowerCase().trim() : '';
@@ -195,7 +196,8 @@
           .reverse()
           .map(function (r) {
             return { nome: (r[iName] || '').trim() || 'Cliente Ragazoni', texto: r[iDepo].trim(), evento: (r[iEvento] || '').trim(),
-                     estrelas: iNota >= 0 ? parseInt(r[iNota], 10) || 0 : 0 };
+                     estrelas: iNota >= 0 ? parseInt(r[iNota], 10) || 0 : 0,
+                     data: iData >= 0 ? (r[iData] || '').replace(/^(\d{2})\/(\d{2})\/(\d{4}).*$/, '$3-$2-$1') : '' };
           });
       })
       .catch(function () { return []; });
@@ -211,7 +213,7 @@
     var fixos = fetch('data/depoimentos.json?_=' + Date.now())
       .then(function (r) { return r.ok ? r.json() : []; })
       .catch(function () { return []; });
-    // respostas novas de /avaliar primeiro, depois os depoimentos fixos
+    // todos juntos, do mais recente para o mais antigo (campo data AAAA-MM-DD)
     Promise.all([depoimentosDoFormulario(), fixos]).then(function (res) {
       var vistos = {};
       var lista = (res[0] || []).concat(res[1] || []).filter(function (d) {
@@ -219,7 +221,7 @@
         if (!chave || vistos[chave]) return false;
         vistos[chave] = true;
         return true;
-      });
+      }).sort(function (a, b) { return String(b.data || '').localeCompare(String(a.data || '')); });
       grid.innerHTML = lista.map(function (d) {
         return '<blockquote class="depo-card">' + estrelas(d.estrelas)
           + '<p>' + esc(d.texto) + '</p>'

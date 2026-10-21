@@ -1,32 +1,38 @@
 [
   {
+    "data": "2026-10-18",
     "nome": "Felipe",
     "evento": "Casamento Isabela & Felipe · outubro/2026",
     "texto": "Seu trabalho é excepcional e você, como pessoa, não tem o que falar. Não tive nenhuma experiência ruim com você que não fosse resolvida. Você fez parte do dia mais importante da minha vida — com certeza foi. Agradeço em meu nome, da Isabela e de toda a nossa família: tudo superou as expectativas."
   },
   {
+    "data": "2026-05-23",
+    "nome": "Vovó Marcela",
+    "evento": "Festa infantil Davi · maio/2026",
+    "texto": "Lembrei que foi maravilhoso — seu serviço é bárbaro, excelente, viu? Estava ótimo!"
+  },
+  {
+    "data": "2026-05-02",
     "nome": "Luísa Guerreiro",
     "evento": "Casamento Luísa & Marcelo · maio/2026",
     "texto": "Seu trabalho foi impecável, sua equipe é maravilhosa! Todo mundo elogiou — e eu consegui pelo menos mais uns 3 casamentos pra você fazer!"
   },
   {
-    "nome": "Lorena Zambello",
-    "evento": "XV Anos · dezembro/2025",
-    "texto": "Você realmente fez um trabalho impecável, cuidando de cada detalhe e esteve comigo em todos os momentos, sempre muito atencioso. Fez todas as festas da minha família — realizou um sonho que eu tinha desde criança."
-  },
-  {
-    "nome": "Amanda & Rafael",
-    "evento": "Casamento · novembro/2025",
-    "texto": "Nem em BH ela viu profissionais assim, tão atenciosos, educados, organizados! Você é o melhor — e eu quero que você organize a renovação de votos, aniversários… só pra não perder esse contato!"
-  },
-  {
+    "data": "2026-03-21",
     "nome": "Ana Julia Mallmann",
     "evento": "Formatura · março/2026",
     "texto": "Foi tudo lindo e além do que eu imaginava. Passando para agradecer você e sua equipe — mas você em especial."
   },
   {
-    "nome": "Vovó Marcela",
-    "evento": "Festa infantil Davi · maio/2026",
-    "texto": "Lembrei que foi maravilhoso — seu serviço é bárbaro, excelente, viu? Estava ótimo!"
+    "data": "2025-12-20",
+    "nome": "Lorena Zambello",
+    "evento": "XV Anos · dezembro/2025",
+    "texto": "Você realmente fez um trabalho impecável, cuidando de cada detalhe e esteve comigo em todos os momentos, sempre muito atencioso. Fez todas as festas da minha família — realizou um sonho que eu tinha desde criança."
+  },
+  {
+    "data": "2025-11-08",
+    "nome": "Amanda & Rafael",
+    "evento": "Casamento · novembro/2025",
+    "texto": "Nem em BH ela viu profissionais assim, tão atenciosos, educados, organizados! Você é o melhor — e eu quero que você organize a renovação de votos, aniversários… só pra não perder esse contato!"
   }
 ]
