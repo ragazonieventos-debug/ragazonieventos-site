@@ -194,19 +194,36 @@
   (function () {
     var grid = document.getElementById('depoGrid');
     if (!grid) return;
-    var fixos = fetch('data/depoimentos.json?_=' + Date.now())
-      .then(function (r) { return r.ok ? r.json() : []; })
-      .catch(function () { return []; });
-    Promise.all([fixos, depoimentosDoFormulario()]).then(function (res) {
+    function json(url) {
+      return fetch(url + '?_=' + Date.now())
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .catch(function () { return null; });
+    }
+    function estrelas(n) {
+      n = Math.max(0, Math.min(5, Math.round(n || 0)));
+      return '<span class="stars" aria-label="' + n + ' de 5 estrelas">' + '★'.repeat(n) + '<i>' + '★'.repeat(5 - n) + '</i></span>';
+    }
+    Promise.all([json('data/avaliacoes-google.json'), json('data/depoimentos.json'), depoimentosDoFormulario()]).then(function (res) {
+      var g = res[0] || {};
+      var badge = document.getElementById('googleBadge');
+      if (badge && g.nota && g.total) {
+        badge.href = g.link_perfil || g.link_avaliar || '#';
+        badge.innerHTML = '<b>G</b>' + estrelas(g.nota) + '<strong>' + String(g.nota).replace('.', ',') + '</strong> no Google · ' + g.total + ' avaliações';
+        badge.hidden = false;
+      }
+      var doGoogle = (g.avaliacoes || []).filter(function (a) { return a && a.texto && (a.estrelas || 5) >= 4; })
+        .map(function (a) { return { nome: a.nome, evento: a.evento || 'Avaliação no Google', texto: a.texto, estrelas: a.estrelas || 5, google: true }; });
       var vistos = {};
-      var lista = res[0].concat(res[1]).filter(function (d) {
-        var chave = (d.texto || '').toLowerCase().replace(/\W+/g, '').slice(0, 60);
+      var lista = doGoogle.concat(res[1] || [], res[2] || []).filter(function (d) {
+        var chave = (d.texto || '').toLowerCase().replace(/W+/g, '').slice(0, 60);
         if (!chave || vistos[chave]) return false;
         vistos[chave] = true;
         return true;
       });
       grid.innerHTML = lista.map(function (d) {
-        return '<blockquote class="depo-card"><p>' + esc(d.texto) + '</p>'
+        return '<blockquote class="depo-card' + (d.google ? ' depo-google' : '') + '">'
+          + (d.google ? '<div class="depo-google-top">' + estrelas(d.estrelas) + '<span>Google</span></div>' : '')
+          + '<p>' + esc(d.texto) + '</p>'
           + '<footer><strong>' + esc(d.nome) + '</strong>'
           + (d.evento ? '<span>' + esc(d.evento) + '</span>' : '') + '</footer></blockquote>';
       }).join('');
