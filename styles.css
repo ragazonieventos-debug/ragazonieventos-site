@@ -594,3 +594,20 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 /* Estrelas nos depoimentos vindos de /avaliar */
 .stars { color: var(--gold); letter-spacing: 0.08em; white-space: nowrap; font-size: 0.9rem; display: block; margin-bottom: 0.9rem; }
 .stars i { font-style: normal; opacity: .25; }
+
+/* ============================================================
+   MOSAICO "CASAMENTOS QUE REALIZAMOS" (data/galeria.json)
+   ============================================================ */
+.gal-tile { position: relative; overflow: hidden; margin: 0; background: var(--surface); }
+.gal-tile.g9 { grid-column: span 2; }
+.gal-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 1.2s var(--ease), transform 6s linear; }
+.gal-tile img.entrando { opacity: 0; transform: scale(1.04); }
+.gal-tile:hover img { transform: scale(1.03); }
+.gal-tile figcaption {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 1.4rem 0.9rem 0.7rem;
+  font-size: 0.72rem; letter-spacing: 0.06em; color: #fff;
+  background: linear-gradient(transparent, rgba(0,0,0,.55));
+  opacity: 0; transition: opacity .4s; pointer-events: none;
+}
+.gal-tile:hover figcaption:not(:empty) { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .gal-tile img { transition: none; } }

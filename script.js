@@ -231,6 +231,66 @@
     });
   })();
 
+  /* ---- Mosaico "Casamentos que realizamos": data/galeria.json ---- */
+  // Os 9 quadros mostram fotos sorteadas e trocam uma por vez, com transição suave.
+  (function () {
+    var mosaico = document.getElementById('galMosaico');
+    if (!mosaico) return;
+    var quadros = [].slice.call(mosaico.querySelectorAll('.gal-tile'));
+    var INTERVALO = 3500;
+    var calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function embaralhar(a) {
+      for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var x = a[i]; a[i] = a[j]; a[j] = x; }
+      return a;
+    }
+    function mostrar(quadro, foto, suave) {
+      var antiga = quadro.querySelector('img');
+      var nova = new Image();
+      nova.alt = foto.casal ? 'Casamento ' + foto.casal : 'Casamento realizado pela Ragazoni Eventos';
+      nova.onload = function () {
+        if (suave && antiga) {
+          nova.className = 'entrando';
+          quadro.insertBefore(nova, quadro.querySelector('figcaption'));
+          requestAnimationFrame(function () { requestAnimationFrame(function () { nova.className = ''; }); });
+          setTimeout(function () { if (antiga.parentNode) antiga.parentNode.removeChild(antiga); }, 1300);
+        } else {
+          if (antiga) antiga.parentNode.removeChild(antiga);
+          quadro.insertBefore(nova, quadro.querySelector('figcaption'));
+        }
+        quadro.querySelector('figcaption').textContent = foto.casal || '';
+        quadro.dataset.src = foto.src;
+      };
+      nova.src = foto.src;
+    }
+
+    fetch('data/galeria.json?_=' + Date.now())
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (lista) {
+        var fotos = embaralhar((lista || []).filter(function (f) { return f && f.src; }));
+        if (!fotos.length) return;
+        quadros.forEach(function (q, i) { if (fotos[i]) mostrar(q, fotos[i], false); });
+        if (fotos.length <= quadros.length || calmo) return;
+
+        var fila = fotos.slice(quadros.length), ultimo = -1, visivel = true;
+        if ('IntersectionObserver' in window) {
+          new IntersectionObserver(function (es) { visivel = es[0].isIntersecting; }).observe(mosaico);
+        }
+        setInterval(function () {
+          if (!visivel || document.hidden) return;
+          var i; do { i = Math.floor(Math.random() * quadros.length); } while (i === ultimo && quadros.length > 1);
+          ultimo = i;
+          if (!fila.length) {
+            var naTela = quadros.map(function (q) { return q.dataset.src; });
+            fila = embaralhar(fotos.filter(function (f) { return naTela.indexOf(f.src) === -1; }));
+          }
+          var foto = fila.shift();
+          if (foto) mostrar(quadros[i], foto, true);
+        }, INTERVALO);
+      })
+      .catch(function () { /* mantém as fotos fixas */ });
+  })();
+
   /* ---- Álbum de fotos misturadas: data/album.json ---- */
   (function () {
     var sec = document.getElementById('album');
