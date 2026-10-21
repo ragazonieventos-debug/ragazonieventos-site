@@ -170,8 +170,10 @@
     return -1;
   }
 
+  // Respostas de /avaliar (Google Forms -> planilha publicada).
+  // Aparece sozinha se a nota for 4 ou 5; "não" na coluna Publicar esconde; "sim" força mostrar.
   function depoimentosDoFormulario() {
-    return fetch(SHEETS_CSV)
+    return fetch(SHEETS_CSV + '&_=' + Date.now())
       .then(function (r) { return r.ok ? r.text() : ''; })
       .then(function (text) {
         var rows = parseCSV(text || '');
@@ -180,12 +182,20 @@
         var iName = colIdx(h, 'nome');
         var iDepo = colIdx(h, 'experiência') !== -1 ? colIdx(h, 'experiência') : colIdx(h, 'depoimento');
         var iEvento = colIdx(h, 'evento') !== -1 ? colIdx(h, 'evento') : colIdx(h, 'data e');
+        var iNota = colIdx(h, 'nota');
         var iPublish = colIdx(h, 'publicar');
-        if (iPublish === -1) return [];
         return rows.slice(1)
-          .filter(function (r) { return (r[iPublish] || '').toLowerCase().trim() === 'sim' && (r[iDepo] || '').trim(); })
+          .filter(function (r) {
+            var pub = iPublish >= 0 ? (r[iPublish] || '').toLowerCase().trim() : '';
+            var nota = iNota >= 0 ? parseInt(r[iNota], 10) || 0 : 0;
+            if (!(r[iDepo] || '').trim()) return false;
+            if (/^n(ã|a)o$/.test(pub)) return false;
+            return pub === 'sim' || nota >= 4;
+          })
+          .reverse()
           .map(function (r) {
-            return { nome: (r[iName] || '').trim() || 'Cliente Ragazoni', texto: r[iDepo].trim(), evento: (r[iEvento] || '').trim() };
+            return { nome: (r[iName] || '').trim() || 'Cliente Ragazoni', texto: r[iDepo].trim(), evento: (r[iEvento] || '').trim(),
+                     estrelas: iNota >= 0 ? parseInt(r[iNota], 10) || 0 : 0 };
           });
       })
       .catch(function () { return []; });
@@ -194,35 +204,24 @@
   (function () {
     var grid = document.getElementById('depoGrid');
     if (!grid) return;
-    function json(url) {
-      return fetch(url + '?_=' + Date.now())
-        .then(function (r) { return r.ok ? r.json() : null; })
-        .catch(function () { return null; });
-    }
     function estrelas(n) {
       n = Math.max(0, Math.min(5, Math.round(n || 0)));
-      return '<span class="stars" aria-label="' + n + ' de 5 estrelas">' + '★'.repeat(n) + '<i>' + '★'.repeat(5 - n) + '</i></span>';
+      return n ? '<span class="stars" aria-label="' + n + ' de 5 estrelas">' + '★'.repeat(n) + '<i>' + '★'.repeat(5 - n) + '</i></span>' : '';
     }
-    Promise.all([json('data/avaliacoes-google.json'), json('data/depoimentos.json'), depoimentosDoFormulario()]).then(function (res) {
-      var g = res[0] || {};
-      var badge = document.getElementById('googleBadge');
-      if (badge && g.nota && g.total) {
-        badge.href = g.link_perfil || g.link_avaliar || '#';
-        badge.innerHTML = '<b>G</b>' + estrelas(g.nota) + '<strong>' + String(g.nota).replace('.', ',') + '</strong> no Google · ' + g.total + ' avaliações';
-        badge.hidden = false;
-      }
-      var doGoogle = (g.avaliacoes || []).filter(function (a) { return a && a.texto && (a.estrelas || 5) >= 4; })
-        .map(function (a) { return { nome: a.nome, evento: a.evento || 'Avaliação no Google', texto: a.texto, estrelas: a.estrelas || 5, google: true }; });
+    var fixos = fetch('data/depoimentos.json?_=' + Date.now())
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .catch(function () { return []; });
+    // respostas novas de /avaliar primeiro, depois os depoimentos fixos
+    Promise.all([depoimentosDoFormulario(), fixos]).then(function (res) {
       var vistos = {};
-      var lista = doGoogle.concat(res[1] || [], res[2] || []).filter(function (d) {
+      var lista = (res[0] || []).concat(res[1] || []).filter(function (d) {
         var chave = (d.texto || '').toLowerCase().replace(/W+/g, '').slice(0, 60);
         if (!chave || vistos[chave]) return false;
         vistos[chave] = true;
         return true;
       });
       grid.innerHTML = lista.map(function (d) {
-        return '<blockquote class="depo-card' + (d.google ? ' depo-google' : '') + '">'
-          + (d.google ? '<div class="depo-google-top">' + estrelas(d.estrelas) + '<span>Google</span></div>' : '')
+        return '<blockquote class="depo-card">' + estrelas(d.estrelas)
           + '<p>' + esc(d.texto) + '</p>'
           + '<footer><strong>' + esc(d.nome) + '</strong>'
           + (d.evento ? '<span>' + esc(d.evento) + '</span>' : '') + '</footer></blockquote>';

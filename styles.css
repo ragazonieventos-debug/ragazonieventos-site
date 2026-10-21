@@ -590,20 +590,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .album-lightbox img { max-width: 100%; }
   .lb-prev, .lb-next { top: auto; bottom: 4rem; transform: none; }
 }
-/* ============================================================
-   AVALIAÇÕES DO GOOGLE (data/avaliacoes-google.json)
-   ============================================================ */
-.google-badge {
-  display: inline-flex; align-items: center; flex-wrap: wrap; gap: 0.45rem; align-self: flex-start;
-  font-size: 0.8rem; color: rgba(250,249,247,.72); text-decoration: none;
-  border: 1px solid rgba(250,249,247,.18); border-radius: 100px; padding: 0.45em 1em;
-  transition: border-color .3s, color .3s;
-}
-.google-badge[hidden] { display: none; }
-.google-badge:hover { border-color: var(--gold); color: #fff; }
-.google-badge b { font-family: Arial, sans-serif; font-weight: 700; color: #fff; }
-.google-badge strong { color: #fff; font-weight: 600; }
-.stars { color: var(--gold); letter-spacing: 0.08em; white-space: nowrap; }
+
+/* Estrelas nos depoimentos vindos de /avaliar */
+.stars { color: var(--gold); letter-spacing: 0.08em; white-space: nowrap; font-size: 0.9rem; display: block; margin-bottom: 0.9rem; }
 .stars i { font-style: normal; opacity: .25; }
-.depo-google-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.9rem; font-size: 0.9rem; }
-.depo-google-top span:last-child { font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(250,249,247,.45); }
