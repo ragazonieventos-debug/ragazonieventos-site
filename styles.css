@@ -611,3 +611,10 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .gal-tile:hover figcaption:not(:empty) { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .gal-tile img { transition: none; } }
+
+/* Quadro de orçamento no lugar do antigo formulário de contato */
+.contato-cta { display: flex; flex-direction: column; gap: 1rem; justify-content: center; }
+.contato-cta h3 { font-family: var(--display); font-weight: 500; font-size: clamp(1.6rem, 3vw, 2.2rem); line-height: 1.15; }
+.contato-cta p { color: var(--muted); line-height: 1.6; margin-bottom: 0.4rem; }
+.contato-cta .btn { justify-content: center; text-align: center; }
+.contato-cta .contato-zap svg { width: 1.1em; height: 1.1em; }
